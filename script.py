@@ -90,9 +90,10 @@ def main() -> None:
                 full = client(GetFullUserRequest(me.id))
                 base_bio = strip_old_track(full.full_user.about or "")
 
+                nbsp = "\u00a0"
+
                 if is_playing and pb is not None and pb.get("item") is not None:
                     track_str = track_as_string(pb["item"])
-                    nbsp = "\u00a0"
                     track_str = track_str.replace(" ", nbsp)  # non-breaking spaces
 
                     # Update only if changed
@@ -103,8 +104,11 @@ def main() -> None:
                         last_track = track_str
                 else:
                     # Nothing playing → clear any old 🎶 line
-                    if last_track is not None:
-                        client(UpdateProfileRequest(about=base_bio))
+                    if last_track is not None or SINGLE_RUN:
+                        new_bio = (
+                            f"{base_bio} 🎶{nbsp}Nothing{nbsp}in{nbsp}the{nbsp}player."
+                        )
+                        client(UpdateProfileRequest(about=new_bio))
                         printd("⊘ Cleared track from bio")
                         last_track = None
 
