@@ -1,0 +1,14 @@
+[Unit]
+Description=Sync Spotify Now Playing to Telegram Bio
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/your/dir/to/script
+ExecStart=/usr/bin/python3 script.py
+Restart=always
+User=yourusername
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
